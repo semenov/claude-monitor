@@ -1,0 +1,5 @@
+ios/build/
+ios/*.xcodeproj/
+backend/claude-monitor
+ios/Shared/Secrets.swift
+ios/Local.xcconfig

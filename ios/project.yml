@@ -1,0 +1,70 @@
+name: ClaudeMonitor
+options:
+  bundleIdPrefix: ai.semenov
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+
+# DEVELOPMENT_TEAM lives here (gitignored); copy from Local.xcconfig.example.
+configFiles:
+  Debug: Local.xcconfig
+  Release: Local.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  ClaudeMonitor:
+    type: application
+    platform: iOS
+    sources:
+      - path: ClaudeMonitor
+      - path: Shared
+        excludes:
+          - "*.example"
+    dependencies:
+      - target: UsageWidget
+    entitlements:
+      path: ClaudeMonitor/ClaudeMonitor.entitlements
+      properties:
+        com.apple.security.application-groups: [group.ai.semenov.claude-monitor]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.semenov.claude-monitor
+        PRODUCT_NAME: Claude Usage
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Claude Usage
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIUserInterfaceStyle: Dark
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+
+  UsageWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Widget
+      - path: Shared
+        excludes:
+          - "*.example"
+    entitlements:
+      path: Widget/UsageWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [group.ai.semenov.claude-monitor]
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: Claude Usage
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.semenov.claude-monitor.widget
+        PRODUCT_NAME: UsageWidget
+        TARGETED_DEVICE_FAMILY: "1"
+        SKIP_INSTALL: YES
